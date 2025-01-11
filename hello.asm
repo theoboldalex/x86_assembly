@@ -38,12 +38,13 @@ _start:
 
 	// write file contents to stdout with sys_write call
 	
-	// exit syscall
+	// exit syscall with success
 	mov rax, 60
 	mov rdi, 0
 	syscall
 
 error:
+	// call sys_exit with non-zero exit code
 	mov rax, 60
 	mov rdi, 1
 	syscall
