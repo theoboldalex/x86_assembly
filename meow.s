@@ -1,4 +1,5 @@
 .section .data
+// we will need to take the filename as a command line argument
 filename:	
 	.asciz "content.txt"
 filename_size = . - filename
@@ -7,6 +8,10 @@ message:
 	.asciz "Welcome to Meow! The rubbish version of Cat I wrote in x86 asm\n\n"
 message_size = . - message
 
+error_message:
+	.asciz "Sorry, the file provided could not be opened."
+error_message_size = . - error_message
+	
 len: .quad 0
 
 .section .bss
@@ -70,6 +75,13 @@ _start:
 	syscall
 
 error:
+	// print the error message to stdout
+	mov rax, 1
+	mov rdi, 1
+	lea rsi, [error_message]
+	mov rdx, error_message_size
+	syscall
+
 	// call sys_exit with non-zero exit code
 	mov rax, 60
 	mov rdi, 1
