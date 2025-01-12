@@ -1,3 +1,9 @@
+/*
+* Welcome to the source of Meow! The very basic clone of the *nix Cat command written in x86_64 Assembler
+*
+* This project was built purely for fun and learning. If you find something that could be improved, please PR.
+*/
+
 .section .data
 // we will need to take the filename as a command line argument
 filename:	
