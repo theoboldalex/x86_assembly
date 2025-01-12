@@ -3,9 +3,11 @@ MAKEFLAGS += --no-print-directory
 all:
 	@$(MAKE) compile && $(MAKE) link && $(MAKE) run
 compile:
-	@as meow.s -o meow.o
+	@as meow.s -o out/meow.o
 link:
-	@gcc meow.o -o meow -nostdlib -static
+	@gcc out/meow.o -o out/meow -nostdlib -static
 run:
-	@./meow
+	@./out/meow
+clean:
+	@rm out/*
 
