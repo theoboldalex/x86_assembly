@@ -1,12 +1,12 @@
 .section .data
 filename:	
 	.asciz "content.txt"
-
-message:
-	.asciz "Welcome to Shat! The rubbish version of Cat I wrote in x86 asm\n\n"
-
-message_size = . - message
 filename_size = . - filename
+// we will make this just the newline chars and prepend the filename so it can be used as a header
+message:
+	.asciz "Welcome to Meow! The rubbish version of Cat I wrote in x86 asm\n\n"
+message_size = . - message
+
 len: .quad 0
 
 .section .bss
