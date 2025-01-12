@@ -3,9 +3,9 @@ MAKEFLAGS += --no-print-directory
 all:
 	@$(MAKE) compile && $(MAKE) link && $(MAKE) run
 compile:
-	@as hello.s -o hello.o
+	@as shat.s -o shat.o
 link:
-	@gcc hello.o -o hello -nostdlib -static
+	@gcc shat.o -o shat -nostdlib -static
 run:
-	@./hello
+	@./shat
 
