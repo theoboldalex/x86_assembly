@@ -1,15 +1,13 @@
 .section .data
-	filename:		
-		.asciz "content.txt"
+filename:	
+	.asciz "content.txt"
 
-	filename_size = . - filename
-	
-	message:
-		.asciz "Welcome to Shat! The rubbish version of Cat I wrote in x86 asm\n\n"
-	
-	message_size = . - message
+message:
+	.asciz "Welcome to Shat! The rubbish version of Cat I wrote in x86 asm\n\n"
 
-	len: .quad 0
+message_size = . - message
+filename_size = . - filename
+len: .quad 0
 
 .section .bss
 	.lcomm buffer, 1024
