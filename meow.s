@@ -3,15 +3,22 @@
 *
 * This project was built purely for fun and learning. If you find something that could be improved, please PR.
 */
-
-.section .data
-filename: .asciz "content.txt"
-filename_size = . - filename
-
-error_message: .asciz "Sorry, the file provided could not be opened."
-error_message_size = . - error_message
 	
-file_contents_len_b: .quad 0
+.section .data
+	.equ SYS_OPEN, 2
+	.equ SYS_READ, 0
+	.equ SYS_WRITE, 1
+	.equ SYS_CLOSE, 3
+	.equ SYS_EXIT, 60
+	.equ STDOUT, 1
+	
+	filename: .asciz "content.txt"
+	filename_size = . - filename
+
+	error_message: .asciz "Sorry, the file provided could not be opened."
+	error_message_size = . - error_message
+	
+	file_contents_len_b: .quad 0
 
 .section .bss
 	.lcomm buffer, 1024
@@ -22,52 +29,47 @@ file_contents_len_b: .quad 0
 	.intel_syntax noprefix
 
 _start:
-	// sys_open: open the file (currently hard coded)
-	mov rax, 2
+	mov rax, SYS_OPEN
 	lea rdi, [filename]
 	mov rsi, 0
 	mov rdx, 0
 	syscall
 	mov [fd], rax
 	
-	// was the sys_open call successful, if not, handle error
+	// jump to error if file cannot be opened
 	cmp rax, 0
 	jl error
 
-	// read file into buffer and get its length in bytes
-	mov rax, 0
+	mov rax, SYS_READ
 	mov rdi, [fd]
 	lea rsi, [buffer]
 	mov rdx, 1024
 	syscall
 	mov [file_contents_len_b], rax
 	
-	// write file contents to stdout with sys_write call
-	mov rax, 1
-	mov rdi, 1
+	mov rax, SYS_WRITE
+	mov rdi, STDOUT
 	lea rsi, [buffer]
 	mov rdx, [file_contents_len_b]
 	syscall
 	
-	// close the file
-	mov rax, 3
+	mov rax, SYS_CLOSE
 	mov rdi, [fd]
 	syscall
 	
-	// exit syscall with success
-	mov rax, 60
+	// exit success
+	mov rax, SYS_EXIT
 	mov rdi, 0
 	syscall
 
 error:
-	// print the error message to stdout
-	mov rax, 1
-	mov rdi, 1
+	mov rax, SYS_WRITE
+	mov rdi, STDOUT
 	lea rsi, [error_message]
 	mov rdx, error_message_size
 	syscall
 
-	// call sys_exit with non-zero exit code
-	mov rax, 60
+	// exit failure
+	mov rax, SYS_EXIT
 	mov rdi, 1
 	syscall
