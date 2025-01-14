@@ -11,6 +11,8 @@
 	.equ SYS_CLOSE, 3
 	.equ SYS_EXIT, 60
 	.equ STDOUT, 1
+	.equ EXIT_SUCCESS, 0
+	.equ EXIT_FAILURE, 1
 	
 	filename: .asciz "content.txt"
 	filename_size = . - filename
@@ -29,6 +31,10 @@
 	.intel_syntax noprefix
 
 _start:
+	// if we have an argument to print, execute that block
+	jz print
+	
+print:	
 	mov rax, SYS_OPEN
 	lea rdi, [filename]
 	mov rsi, 0
@@ -57,9 +63,11 @@ _start:
 	mov rdi, [fd]
 	syscall
 	
-	// exit success
+	jz success
+	
+success:
 	mov rax, SYS_EXIT
-	mov rdi, 0
+	mov rdi, EXIT_SUCCESS
 	syscall
 
 error:
@@ -69,7 +77,6 @@ error:
 	mov rdx, error_message_size
 	syscall
 
-	// exit failure
 	mov rax, SYS_EXIT
-	mov rdi, 1
+	mov rdi, EXIT_FAILURE
 	syscall
