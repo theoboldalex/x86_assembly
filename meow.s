@@ -9,11 +9,11 @@
 filename:	
 	.asciz "content.txt"
 filename_size = . - filename
-// we will make this just the newline chars and prepend the filename so it can be used as a header
-message:
-	.asciz "Welcome to Meow! The rubbish version of Cat I wrote in x86 asm\n\n"
-message_size = . - message
 
+break:
+	.asciz "\n\n"
+break_size = . - break
+	
 error_message:
 	.asciz "Sorry, the file provided could not be opened."
 error_message_size = . - error_message
@@ -48,20 +48,6 @@ _start:
 	mov rdx, 1024
 	syscall
 	mov [len], rax
-	
-	// write a header message to stdout
-	mov rax, 1
-	mov rdi, 1
-	lea rsi, [message]
-	mov rdx, message_size
-	syscall
-
-	// print the filename
-	mov rax, 1
-	mov rdi, 1
-	lea rsi, [filename]
-	mov rdx, filename_size
-	syscall
 	
 	// write file contents to stdout with sys_write call
 	mov rax, 1
