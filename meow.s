@@ -10,10 +10,6 @@ filename:
 	.asciz "content.txt"
 filename_size = . - filename
 
-break:
-	.asciz "\n\n"
-break_size = . - break
-	
 error_message:
 	.asciz "Sorry, the file provided could not be opened."
 error_message_size = . - error_message
