@@ -5,16 +5,13 @@
 */
 
 .section .data
-// we will need to take the filename as a command line argument
-filename:	
-	.asciz "content.txt"
+filename: .asciz "content.txt"
 filename_size = . - filename
 
-error_message:
-	.asciz "Sorry, the file provided could not be opened."
+error_message: .asciz "Sorry, the file provided could not be opened."
 error_message_size = . - error_message
 	
-len: .quad 0
+file_contents_len_b: .quad 0
 
 .section .bss
 	.lcomm buffer, 1024
@@ -43,13 +40,13 @@ _start:
 	lea rsi, [buffer]
 	mov rdx, 1024
 	syscall
-	mov [len], rax
+	mov [file_contents_len_b], rax
 	
 	// write file contents to stdout with sys_write call
 	mov rax, 1
 	mov rdi, 1
 	lea rsi, [buffer]
-	mov rdx, [len]
+	mov rdx, [file_contents_len_b]
 	syscall
 	
 	// close the file
