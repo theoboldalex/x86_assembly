@@ -31,10 +31,6 @@
 	.intel_syntax noprefix
 
 _start:
-	// if we have an argument to print, execute that block
-	jz print
-	
-print:	
 	mov rax, SYS_OPEN
 	lea rdi, [filename]
 	mov rsi, 0
@@ -46,6 +42,10 @@ print:
 	cmp rax, 0
 	jl error
 
+	// if we have an argument to print, execute that block
+	jz print
+	
+print:	
 	mov rax, SYS_READ
 	mov rdi, [fd]
 	lea rsi, [buffer]
